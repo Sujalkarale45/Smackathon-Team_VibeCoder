@@ -42,7 +42,7 @@ const Dashboard = ({ onNavigate }) => {
 
   return (
     <div className="dashboard">
-      <h1>MedAI Lite</h1>
+      <h1>Med-Chat</h1>
       <div className="tools-grid">
         {tools.map((tool) => (
           <button

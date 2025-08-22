@@ -60,16 +60,33 @@ const PrescriptionDetector = ({ onBack }) => {
   };
 
   const formatMedicines = (medicines) => {
-    if (!medicines || !Array.isArray(medicines)) return 'No medicines found';
+    if (!medicines || !Array.isArray(medicines)) return [];
     
-    return medicines.map((med, index) => (
-      `Medicine ${index + 1}:
-      Name: ${med.name || 'Not specified'}
-      Dosage: ${med.dosage || 'Not specified'}
-      Timing: ${med.timing || 'Not specified'}
-      Duration: ${med.duration || 'Not specified'}
-      Instructions: ${med.instructions || 'Not specified'}`
-    )).join('\n\n');
+    return medicines.map((med, index) => ({
+      id: index + 1,
+      name: med.name || 'Not specified',
+      genericName: med.generic_name || 'Not specified',
+      dosage: med.dosage || 'Not specified',
+      frequency: med.frequency || 'Not specified',
+      timing: med.timing || 'Not specified',
+      duration: med.duration || 'Not specified',
+      route: med.route || 'Not specified',
+      instructions: med.instructions || 'Not specified',
+      purpose: med.purpose || 'Not specified'
+    }));
+  };
+
+  const formatAISuggestions = (suggestions) => {
+    if (!suggestions || !Array.isArray(suggestions)) return [];
+    
+    return suggestions.map((suggestion, index) => ({
+      id: index + 1,
+      medicine: suggestion.medicine || 'Not specified',
+      suggestedTiming: suggestion.suggested_timing || 'Not specified',
+      suggestedDuration: suggestion.suggested_duration || 'Not specified',
+      suggestedFrequency: suggestion.suggested_frequency || 'Not specified',
+      reasoning: suggestion.reasoning || 'Not specified'
+    }));
   };
 
   return (
@@ -129,56 +146,103 @@ const PrescriptionDetector = ({ onBack }) => {
             </div>
             
             <div className="results-content">
-              {result.medicines && (
-                <div>
-                  <h4>Medicines:</h4>
-                  <pre>{formatMedicines(result.medicines)}</pre>
+              {/* Display the main analysis */}
+              {result.analysis && (
+                <div className="analysis-section">
+                  <div className="analysis-text">
+                    <FormattedOutput content={result.analysis} />
+                  </div>
                 </div>
               )}
               
-              {result.doctor_name && result.doctor_name !== 'Not specified' && (
-                <div>
-                  <h4>Doctor:</h4>
-                  <p>{result.doctor_name}</p>
+              {/* Fallback for complex JSON structure (if returned) */}
+              {result.prescription_analysis && (
+                <>
+                  {/* Medicines Section */}
+                  {result.prescription_analysis.medicines && result.prescription_analysis.medicines.length > 0 && (
+                    <div className="analysis-section">
+                      <h4>💊 Medicines Prescribed</h4>
+                      <div className="medicines-grid">
+                        {formatMedicines(result.prescription_analysis.medicines).map((medicine) => (
+                          <div key={medicine.id} className="medicine-card">
+                            <div className="medicine-header">
+                              <h5>Medicine {medicine.id}: {medicine.name}</h5>
+                              {medicine.genericName !== 'Not specified' && (
+                                <p className="generic-name">({medicine.genericName})</p>
+                              )}
+                            </div>
+                            
+                            <div className="medicine-details">
+                              <div className="detail-row">
+                                <span className="detail-label">💊 Dosage:</span>
+                                <span className="detail-value">{medicine.dosage}</span>
+                              </div>
+                              
+                              <div className="detail-row">
+                                <span className="detail-label">🔄 Frequency:</span>
+                                <span className="detail-value">{medicine.frequency}</span>
+                              </div>
+                              
+                              <div className="detail-row">
+                                <span className="detail-label">⏰ Timing:</span>
+                                <span className="detail-value">{medicine.timing}</span>
+                              </div>
+                              
+                              <div className="detail-row">
+                                <span className="detail-label">📅 Duration:</span>
+                                <span className="detail-value">{medicine.duration}</span>
+                              </div>
+                              
+                              <div className="detail-row">
+                                <span className="detail-label">🚀 How to take:</span>
+                                <span className="detail-value">{medicine.route}</span>
+                              </div>
+                              
+                              {medicine.instructions !== 'Not specified' && (
+                                <div className="detail-row">
+                                  <span className="detail-label">📋 Instructions:</span>
+                                  <span className="detail-value">{medicine.instructions}</span>
+                                </div>
+                              )}
+                              
+                              {medicine.purpose !== 'Not specified' && (
+                                <div className="detail-row">
+                                  <span className="detail-label">🎯 Purpose:</span>
+                                  <span className="detail-value">{medicine.purpose}</span>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Other JSON structure sections remain for backward compatibility */}
+                </>
+              )}
+              
+              {/* Raw analysis fallback */}
+              {result.raw_analysis && !result.analysis && (
+                <div className="analysis-section">
+                  <h4>Prescription Analysis</h4>
+                  <div className="analysis-text">
+                    <FormattedOutput content={result.raw_analysis} />
+                  </div>
                 </div>
               )}
               
-              {result.patient_name && result.patient_name !== 'Not specified' && (
-                <div>
-                  <h4>Patient:</h4>
-                  <p>{result.patient_name}</p>
+              {/* Error handling */}
+              {result.error && (
+                <div className="error">
+                  <p>{result.error}</p>
                 </div>
               )}
               
-              {result.date && result.date !== 'Not specified' && (
-                <div>
-                  <h4>Date:</h4>
-                  <p>{result.date}</p>
-                </div>
-              )}
-              
-              {result.precautions && result.precautions.length > 0 && (
-                <div>
-                  <h4>Precautions:</h4>
-                  <ul>
-                    {result.precautions.map((precaution, index) => (
-                      <li key={index}>{precaution}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-              
-              {result.extracted_text && (
-                <div>
-                  <h4>Extracted Text:</h4>
-                  <FormattedOutput content={result.extracted_text} />
-                </div>
-              )}
-              
-              {result.structured_data && (
-                <div>
-                  <h4>Structured Analysis:</h4>
-                  <FormattedOutput content={result.structured_data} />
+              {/* Disclaimer */}
+              {result.disclaimer && (
+                <div className="disclaimer">
+                  <p><strong>⚠️ Disclaimer:</strong> {result.disclaimer}</p>
                 </div>
               )}
             </div>
