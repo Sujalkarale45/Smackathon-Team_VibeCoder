@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import FormattedOutput from './FormattedOutput';
 
-const DietPlanner = ({ onBack }) => {
+const DietPlanner = ({ onBack, language }) => {
   const [condition, setCondition] = useState('');
   const [medicines, setMedicines] = useState('');
   const [dietaryRestrictions, setDietaryRestrictions] = useState('');
@@ -26,7 +26,8 @@ const DietPlanner = ({ onBack }) => {
       const response = await axios.post('/api/diet-planner', {
         condition: condition,
         medicines: medicines,
-        dietary_restrictions: dietaryRestrictions
+        dietary_restrictions: dietaryRestrictions,
+        language: language || 'en'
       });
       setResult(response.data);
     } catch (err) {

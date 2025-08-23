@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import FormattedOutput from './FormattedOutput';
 
-const DiseasePredictor = ({ onBack }) => {
+const DiseasePredictor = ({ onBack, language }) => {
   const [symptoms, setSymptoms] = useState('');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
@@ -22,7 +22,8 @@ const DiseasePredictor = ({ onBack }) => {
 
     try {
       const response = await axios.post('/api/disease-predictor', {
-        symptoms: symptoms
+        symptoms: symptoms,
+        language: language || 'en'
       });
       setResult(response.data);
     } catch (err) {

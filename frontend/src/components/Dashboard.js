@@ -1,6 +1,12 @@
 import React from 'react';
 
-const Dashboard = ({ onNavigate }) => {
+const Dashboard = ({ onNavigate, language, onLanguageChange }) => {
+  const languages = [
+    { code: 'english', name: 'English', flag: '🇺🇸' },
+    { code: 'hindi', name: 'हिंदी (Hindi)', flag: '🇮🇳' },
+    { code: 'marathi', name: 'मराठी (Marathi)', flag: '🇮🇳' }
+  ];
+
   const tools = [
     {
       id: 'prescription-detector',
@@ -42,7 +48,24 @@ const Dashboard = ({ onNavigate }) => {
 
   return (
     <div className="dashboard">
-      <h1>Med-Chat</h1>
+      <div className="dashboard-header">
+        <h1>Med-Chat</h1>
+        <div className="language-selector">
+          <label htmlFor="language-select">🌐 Language:</label>
+          <select 
+            id="language-select"
+            value={language} 
+            onChange={(e) => onLanguageChange(e.target.value)}
+            className="language-dropdown"
+          >
+            {languages.map((lang) => (
+              <option key={lang.code} value={lang.code}>
+                {lang.flag} {lang.name}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
       <div className="tools-grid">
         {tools.map((tool) => (
           <button

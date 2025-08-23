@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import FormattedOutput from './FormattedOutput';
 
-const MedicalChatBot = ({ onBack }) => {
+const MedicalChatBot = ({ onBack, language }) => {
   const [messages, setMessages] = useState([
     {
       type: 'bot',
@@ -37,7 +37,8 @@ const MedicalChatBot = ({ onBack }) => {
 
       const response = await axios.post('/api/medical-chatbot', {
         question: currentQuestion,
-        chat_history: chatHistory
+        chat_history: chatHistory,
+        language: language || 'en'
       });
 
       const botMessage = {

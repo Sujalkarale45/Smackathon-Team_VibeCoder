@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import FormattedOutput from './FormattedOutput';
 
-const MedicineAnalyzer = ({ onBack }) => {
+const MedicineAnalyzer = ({ onBack, language }) => {
   const [inputType, setInputType] = useState('text');
   const [medicineName, setMedicineName] = useState('');
   const [file, setFile] = useState(null);
@@ -42,6 +42,7 @@ const MedicineAnalyzer = ({ onBack }) => {
     } else {
       formData.append('file', file);
     }
+    formData.append('language', language || 'en');
 
     try {
       const response = await axios.post('/api/medicine-analyzer', formData, {

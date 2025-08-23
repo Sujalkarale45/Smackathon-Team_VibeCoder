@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import FormattedOutput from './FormattedOutput';
 
-const PrescriptionDetector = ({ onBack }) => {
+const PrescriptionDetector = ({ onBack, language }) => {
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
@@ -29,6 +29,7 @@ const PrescriptionDetector = ({ onBack }) => {
 
     const formData = new FormData();
     formData.append('file', file);
+    formData.append('language', language || 'en');
 
     try {
       const response = await axios.post('/api/prescription-detector', formData, {

@@ -24,12 +24,63 @@ body {
   min-height: 100vh;
 }
 
-.dashboard h1 {
-  text-align: center;
-  color: white;
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 3rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.dashboard h1 {
+  color: white;
   font-size: 3rem;
   text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  margin: 0;
+}
+
+.language-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.8rem 1.2rem;
+  border-radius: 25px;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.language-selector label {
+  color: white;
+  font-weight: 600;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.language-dropdown {
+  background: rgba(255, 255, 255, 0.95);
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 160px;
+}
+
+.language-dropdown:hover {
+  background: white;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.language-dropdown:focus {
+  outline: none;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
 }
 
 .tools-grid {
@@ -323,9 +374,22 @@ body {
     padding: 1rem;
   }
   
+  .dashboard-header {
+    flex-direction: column;
+    text-align: center;
+  }
+  
   .dashboard h1 {
     font-size: 2rem;
-    margin-bottom: 2rem;
+  }
+  
+  .language-selector {
+    padding: 0.6rem 1rem;
+  }
+  
+  .language-dropdown {
+    min-width: 140px;
+    font-size: 0.85rem;
   }
   
   .tools-grid {

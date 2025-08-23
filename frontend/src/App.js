@@ -10,23 +10,24 @@ import MedicalReportAnalysis from './components/MedicalReportAnalysis';
 
 function App() {
   const [activeView, setActiveView] = useState('dashboard');
+  const [selectedLanguage, setSelectedLanguage] = useState('english');
 
   const renderActiveView = () => {
     switch (activeView) {
       case 'prescription-detector':
-        return <PrescriptionDetector onBack={() => setActiveView('dashboard')} />;
+        return <PrescriptionDetector onBack={() => setActiveView('dashboard')} language={selectedLanguage} />;
       case 'medicine-analyzer':
-        return <MedicineAnalyzer onBack={() => setActiveView('dashboard')} />;
+        return <MedicineAnalyzer onBack={() => setActiveView('dashboard')} language={selectedLanguage} />;
       case 'disease-predictor':
-        return <DiseasePredictor onBack={() => setActiveView('dashboard')} />;
+        return <DiseasePredictor onBack={() => setActiveView('dashboard')} language={selectedLanguage} />;
       case 'diet-planner':
-        return <DietPlanner onBack={() => setActiveView('dashboard')} />;
+        return <DietPlanner onBack={() => setActiveView('dashboard')} language={selectedLanguage} />;
       case 'medical-chatbot':
-        return <MedicalChatBot onBack={() => setActiveView('dashboard')} />;
+        return <MedicalChatBot onBack={() => setActiveView('dashboard')} language={selectedLanguage} />;
       case 'medical-report-analysis':
-        return <MedicalReportAnalysis onBack={() => setActiveView('dashboard')} />;
+        return <MedicalReportAnalysis onBack={() => setActiveView('dashboard')} language={selectedLanguage} />;
       default:
-        return <Dashboard onNavigate={setActiveView} />;
+        return <Dashboard onNavigate={setActiveView} language={selectedLanguage} onLanguageChange={setSelectedLanguage} />;
     }
   };
 
